@@ -1,6 +1,9 @@
 import { useState } from 'react'
 
+const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>
+
 const App = () => {
+
     const anecdotes = [
         'If it hurts, do it more often.',
         'Adding manpower to a late software project makes it later!',
@@ -12,12 +15,33 @@ const App = () => {
         'The only way to go fast, is to go well.'
     ]
 
-    const [selected, setSelected] = useState(0)
+    const handleClick = () => {
+        const random = Math.floor(Math.random() * anecdotes.length);
+        setSelected(random);
+    }
+    const handleVote = () => {
+        const nObject = {...votes};
+        nObject[selected] += 1;
+        const moreVotes = Object.keys(nObject).reduce((a, b) => nObject[a] > nObject[b] ? a : b);
+        setHasMoreVotes(moreVotes);
+        setVotes(nObject);
+    }
+
+    const [selected, setSelected] = useState(0);
+    const [votes, setVotes] = useState({0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0});
+    const [hasMoreVotes, setHasMoreVotes] = useState(0);
 
     return (
-        <div>
-            {anecdotes[selected]}
-        </div>
+        <>
+            <h1>Anecdote of the day</h1>
+            <p>{anecdotes[selected]}</p>
+            <p>has {votes[selected]} votes</p>
+            <button onClick={handleClick}>randomize</button>
+            <button onClick={handleVote}>vote</button>
+            <h1>Anecdote with most votes</h1>
+            <p>{anecdotes[hasMoreVotes]}</p>
+            <p>has {votes[hasMoreVotes]} votes</p>
+        </>
     )
 }
 
