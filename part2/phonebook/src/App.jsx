@@ -1,15 +1,19 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import PersonsList from './components/PersonsList';
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', number: '040-123456' }
-    ])
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchFilter, setSearchFilter] = useState('')
+
+    useEffect(() => {
+        fetch('http://localhost:3001/persons')
+            .then(response => response.json())
+            .then(data => setPersons(data))
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault()
